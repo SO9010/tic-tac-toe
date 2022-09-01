@@ -1,5 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include "includes/SDL.h"
+#include "includes/SDL_ttf.h"
+#include "includes/SDL_mixer.h"
 #include <iostream>
 #include <string.h>
 
@@ -95,7 +96,13 @@ int playerWin(int table[3][3]){
     return 0;
 }
 
-void gameEventHandle(bool &isRunning, int table[3][3], int &mouseX, int &mouseY, int &playerNumber, bool &playerOneGo, bool playing){
+void audio(int track){
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    Mix_Chunk *click = Mix_LoadWAV("click.mp3");
+    Mix_PlayChannel(-1, click, 0);
+}
+
+void gameEventHandle(bool &isRunning, int table[3][3], int &mouseX, int &mouseY, int &playerNumber, bool playerOneGo, bool playing){
     SDL_Event event;
     if(SDL_WaitEvent(&event)){
 		    switch(event.type){
@@ -143,6 +150,7 @@ void gameEventHandle(bool &isRunning, int table[3][3], int &mouseX, int &mouseY,
 
                 break; 
                 case SDL_MOUSEBUTTONUP:
+                    audio(2);
                     SDL_GetMouseState(&mouseX, &mouseY);
                     if(mouseX < 200 && mouseY < 200 && table[0][0] == 0){
                         table[0][0] = playerNumber;
@@ -302,16 +310,19 @@ int main(){
     SDL_Renderer *renderer;
     SDL_Window *window;
     int mouseX, mouseY;
-
+    
     TTF_Init();
     SDL_Init(SDL_INIT_EVERYTHING);
+    
+    Uint32 windowFlags = SDL_WINDOW_SHOWN | SDL_RENDERER_PRESENTVSYNC;
     window = SDL_CreateWindow(
             "TickTackToe",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             600,
             600,
-            SDL_RENDERER_PRESENTVSYNC);
+            windowFlags);
+    SDL_SetWindowResizable(window, SDL_FALSE);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if(renderer){
@@ -321,7 +332,7 @@ int main(){
     else{
         isRunning = false;
     }
-    
+
     while(isRunning){
 	    gameEventHandle(isRunning, table, mouseX, mouseY, playerNumber, playerOneGo, playing);
         SDL_SetRenderDrawColor(renderer, 22, 22, 22, 255);
@@ -352,6 +363,7 @@ int main(){
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    Mix_Quit();
     TTF_Quit();
     SDL_Quit();
 
