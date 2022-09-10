@@ -1,6 +1,6 @@
-#include "includes/SDL.h"
-#include "includes/SDL_ttf.h"
-#include "includes/SDL_mixer.h"
+#include "includes/SDL2/SDL.h"
+#include "includes/SDL2/SDL_ttf.h"
+#include "includes/SDL2/SDL_mixer.h"
 #include <iostream>
 #include <string.h>
 
@@ -98,7 +98,7 @@ int playerWin(int table[3][3]){
 
 void audio(int track){
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_Chunk *click = Mix_LoadWAV("click.mp3");
+    Mix_Chunk *click = Mix_LoadWAV("includes/sounds/click.mp3");
     Mix_PlayChannel(-1, click, 0);
 }
 
@@ -279,7 +279,7 @@ void drawEndScreen(SDL_Renderer *renderer, int win){
     SDL_SetRenderDrawColor(renderer, 22, 22, 22, 255);
     SDL_RenderClear(renderer);
     
-    TTF_Font * font = TTF_OpenFont("AmaticSC-Regular.ttf", 500);
+    TTF_Font * font = TTF_OpenFont("includes/fonts/AmaticSC-Regular.ttf", 500);
     SDL_Color textColour = {175, 175, 175};
     SDL_Surface * surface = TTF_RenderText_Blended(font, winMessage.c_str(), textColour);
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface);

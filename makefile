@@ -1,8 +1,8 @@
-output: tiktacktoe.o
-	g++ -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lstdc++ tiktacktoe.o -o output
+output: tic-tac-toe.o
+	g++ -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lstdc++ tic-tac-toe.o -o output
 
-tiktacktoe.o: tiktacktoe.cpp
-	g++ -c tiktacktoe.cpp
+tic-tac-toe.o: tic-tac-toe.cpp
+	g++ -c tic-tac-toe.cpp
 
 clean: 
 	rm *.o output
